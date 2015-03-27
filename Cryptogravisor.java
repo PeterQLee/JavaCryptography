@@ -3,6 +3,7 @@ public class Cryptogravisor extends JFrame {
     //handles all the GUI, and calls methods in other classes
     
     private ArrayList<Encryption> encryptlist;
+    private Contacts;
     private Cryptogravisor() {
 	//initialize GUI and stuff
     }
@@ -20,6 +21,7 @@ public class Cryptogravisor extends JFrame {
     }
     private void sendMSG() {
 	//sends messaged based on the user's selected contact and their message in the textfield
+	//encrypts for recipient, and sends to user with communications class
     }
     public void handleMessage(String message, String address) {
 	
