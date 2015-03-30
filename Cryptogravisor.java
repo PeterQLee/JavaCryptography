@@ -6,11 +6,11 @@ public class Cryptogravisor extends JFrame {
     
     private ArrayList<Encryption> encryptlist;
     private Contacts contacts;
-
+    private Communications comm;
     public Cryptogravisor() {
 	super ("ayylmao");
 	//initialize GUI and stuff
-	new Communications(6000,6001,this);
+	comm=new Communications(6000,6001,this);
 	setVisible(true);
     }
     
