@@ -36,7 +36,6 @@ public class Cryptogravisor extends JFrame {
     private void sendMSG(String address, String message) throws InvalidatedEncryptionException {
 	//sends messaged based on the user's selected contact and their message in the textfield
 	//encrypts for recipient, and sends to user with communications class
-		// Checks if address is added if not will add the address to contacts
     	// sends the encrypted message to the address
 	    comm.send(address, encryptlist.get(encryptlist.indexOf(address)).encryptText(message));
     }
@@ -49,11 +48,11 @@ public class Cryptogravisor extends JFrame {
 	    	// Decrypts the message and prints it
 	    	// Assumes all messages that are received are encrypted
 	    	System.out.print(encryptlist.get(index).decryptText(message));
-    	
     }
     public void handleKey(byte[] info, String address) {
 	//handles encryption info passed for public key crypt
-    	encryptlist.add(new Encryption(null));
+    	encryptlist.add(new Encryption(Encryption.calcKey(info)));
+    	addToContacts("New Friend", address);
     }
 	
     public void quit() {
