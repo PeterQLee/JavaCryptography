@@ -9,7 +9,6 @@ public class Cryptogravisor extends JFrame {
     private ArrayList<Encryption> encryptlist = new ArrayList<Encryption>();
     private Contacts contacts = new Contacts();
     private Communications comm;
-    private Encryption encrypt;
     public Cryptogravisor() {
 	super ("ayylmao");
 	//initialize GUI and stuff
@@ -27,10 +26,9 @@ public class Cryptogravisor extends JFrame {
     	BigInteger bigint = Encryption.calcMod();
     	// adds the user entry to the contacts class
     	contacts.addContact(name, address);
-    	encrypt = new Encryption(bigint);
-    	encryptlist.add(encrypt);
+    	encryptlist.add(new Encryption(bigint));
     	// sends the key and mod to given address 
-    	comm.sendKeyAndMod(address, encrypt.DiffieHellmanComputeKey(), bigint);
+    	comm.sendKeyAndMod(address, encryptlist.get(encryptlist.indexOf(address)).DiffieHellmanComputeKey(), bigint);
     }
     private void updateContactList() {
 	//updates GUI, to the current contents of Contacts class
@@ -38,13 +36,9 @@ public class Cryptogravisor extends JFrame {
     private void sendMSG(String address, String message) throws InvalidatedEncryptionException {
 	//sends messaged based on the user's selected contact and their message in the textfield
 	//encrypts for recipient, and sends to user with communications class
-    	// Creates the variables
-    	String encryptedMessage;
-    	encryptedMessage = encrypt.encryptText(message);
 		// Checks if address is added if not will add the address to contacts
     	// sends the encrypted message to the address
-	    comm.send(address, encryptedMessage);
-		
+	    comm.send(address, encryptlist.get(encryptlist.indexOf(address)).encryptText(message));
     }
     public void handleMessage(String message, String address) throws InvalidatedEncryptionException {
 	//called by server, and will be printed to GUI by this method
@@ -54,12 +48,12 @@ public class Cryptogravisor extends JFrame {
 	    	System.out.print(message);
 	    	// Decrypts the message and prints it
 	    	// Assumes all messages that are received are encrypted
-	    	String decryptedMessage = encryptlist.get(index).decryptText(message);
-	    	System.out.print(decryptedMessage);
+	    	System.out.print(encryptlist.get(index).decryptText(message));
     	
     }
     public void handleKey(byte[] info, String address) {
 	//handles encryption info passed for public key crypt
+    	encryptlist.add(new Encryption(null));
     }
 	
     public void quit() {
@@ -68,12 +62,11 @@ public class Cryptogravisor extends JFrame {
     
     public void handleKeyAndMod(byte dat[], byte mod[], String address){
     	// Adds a new friend contact for the user to change the name of
-    	add ToContacts("New Friend", address);
-    	// Creates a new encryption
-    	encrypt = new Encryption(mod);
+    	addToContacts("New Friend", address);
     	// Sends the key
-    	comm.sendKey(address, encrypt.DiffieHellmanComputeKey());
-    	// Adds the encryption entry
+    	comm.sendKey(address, new Encryption(mod).DiffieHellmanComputeKey());
+    	// Adds the encryption entry 
+    	// (NOT FINISHED)
     	encryptlist.add(encrypt);
     }
     
