@@ -28,7 +28,7 @@ public class Cryptogravisor extends JFrame {
     	contacts.addContact(name, address);
     	encryptlist.add(new Encryption(bigint));
     	// sends the key and mod to given address 
-    	comm.sendKeyAndMod(address, encryptlist.get(encryptlist.indexOf(address)).DiffieHellmanComputeKey(), bigint);
+    	comm.sendKeyAndMod(address, encryptlist.get(contacts.indexOfAddress(address)).DiffieHellmanComputeKey(), bigint);
     }
     private void updateContactList() {
 	//updates GUI, to the current contents of Contacts class
@@ -51,7 +51,7 @@ public class Cryptogravisor extends JFrame {
     }
     public void handleKey(byte[] info, String address) {
 	//handles encryption info passed for public key crypt
-    	encryptlist.add(new Encryption(Encryption.calcKey(info)));
+    	
     	addToContacts("New Friend", address);
     }
 	
@@ -62,11 +62,10 @@ public class Cryptogravisor extends JFrame {
     public void handleKeyAndMod(byte dat[], byte mod[], String address){
     	// Adds a new friend contact for the user to change the name of
     	addToContacts("New Friend", address);
-    	// Sends the key
-    	comm.sendKey(address, new Encryption(mod).DiffieHellmanComputeKey());
-    	// Adds the encryption entry 
-    	// (NOT FINISHED)
-    	encryptlist.add(encrypt);
+    	encryptlist.add(new Encryption(mod));
+    	// Calculates the key
+    	encryptlist.get(contacts.indexOfAddress(address)).calcKey(dat);
+    	comm.sendKey(address,encryptlist.get(contacts.indexOfAddress(address)).DiffieHellmanComputeKey());
     }
     
     public static void main(String args[]) {
