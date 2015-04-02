@@ -6,20 +6,36 @@ class InvalidatedEncryptionException extends Exception {
 	super(message);
     }
 }
+
 public class Encryption {
     //houses all the methods for encrypting messages
     private BigInteger base;
     private BigInteger mod;
     private BigInteger secret;
-    private BigInteger key;//TEMP
-    public Encryption(int base,BigInteger mod) {
+    private BigInteger key;
+    
+    
+
+    public Encryption(BigInteger mod) {
 	//initiates values
 	SecureRandom r=new SecureRandom();
-	secret=new BigInteger(100,10,r);
+	secret=new BigInteger(128,10,r);
 	this.mod=mod;
-	this.base=BigInteger.valueOf(base);
+	this.base=BigInteger.valueOf(7);
 	key=BigInteger.valueOf(-1);
 
+    }
+    /* public static int getBase() {
+	//generates from a list of primes
+	int primes[]={2,3,5,7,11,13};
+	int sel=(int)(Math.random()*6);
+	return primes[sel];
+	}*/
+    
+    public static BigInteger calcMod() {
+	//generate a random modulus
+	SecureRandom r=new SecureRandom();
+	return new BigInteger(256,10,r);
     }
     public static String cipher(String text,String cipher) {
 	//XOR encrypts                                                          
@@ -92,7 +108,7 @@ public class Encryption {
 	for (int i=1;i<t.length;i++) {
 	    let=t[i];
 	    for (int j=0;j<btearray.length;j++) {
-		let=(char)((byte)let^btearray[j]);
+	    	let=(char)((byte)let^btearray[j]);	
 	    }
 	    let=(char)((byte)(let-t[i-1])&0xff); //ensures proper sign
 	    ret+=let;
