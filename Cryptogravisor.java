@@ -1,14 +1,20 @@
+import javax.swing.*;
+import java.util.ArrayList;
 public class Cryptogravisor extends JFrame {
     //the main class of the program
     //handles all the GUI, and calls methods in other classes
     
     private ArrayList<Encryption> encryptlist;
-    private Contacts;
-    private Cryptogravisor() {
+    private Contacts contacts;
+    private Communications comm;
+    public Cryptogravisor() {
+	super ("ayylmao");
 	//initialize GUI and stuff
+	comm=new Communications(6000,6001,this);
+	setVisible(true);
     }
     
-    private void actionPerformed() {
+    public void actionPerformed() {
 	//responds to user input
 	//delegates message sends, and user adds
 
@@ -26,6 +32,8 @@ public class Cryptogravisor extends JFrame {
     public void handleMessage(String message, String address) {
 	
 	//called by server, and will be printed to GUI by this method
+	System.out.println(message);
+	System.out.println(address);
     }
     public void handleKey(Object info, String address) {
 	//handles encryption info passed for public key crypt
