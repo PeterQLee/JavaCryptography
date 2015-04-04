@@ -32,7 +32,7 @@ public class Encryption {
 	return primes[sel];
 	}*/
     
-    public static BigInteger getMod() {
+    public static BigInteger calcMod() {
 	//generate a random modulus
 	SecureRandom r=new SecureRandom();
 	return new BigInteger(256,10,r);
@@ -108,7 +108,7 @@ public class Encryption {
 	for (int i=1;i<t.length;i++) {
 	    let=t[i];
 	    for (int j=0;j<btearray.length;j++) {
-		let=(char)((byte)let^btearray[j]);
+	    	let=(char)((byte)let^btearray[j]);	
 	    }
 	    let=(char)((byte)(let-t[i-1])&0xff); //ensures proper sign
 	    ret+=let;

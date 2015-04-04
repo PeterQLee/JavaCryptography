@@ -7,8 +7,8 @@ public class Contacts {
     private ArrayList<String> name;
 
     public Contacts() {
-	   address=new ArrayList<String>();
-      name=new ArrayList<String>();
+	address=new ArrayList<String>();
+	name=new ArrayList<String>();
     }
     public void addContact(String name, String address) {
 	   //adds contacts to arraylist
@@ -43,7 +43,23 @@ public class Contacts {
        return name.indexOf(n);    
     }
     public int indexOfAddress(String a){
-       //return index of a given name
+       //return index of a given address
        return address.indexOf(a);   
-    }    
+    }
+    public boolean containsAddress(String address){
+    	// If it contains a given address will return true;
+    	if (this.address.size() != 0){
+	    	for (int i = 0; i < this.address.size(); i++){
+	    		if (this.address.get(i).equals(address)){
+	    			return true;
+	    		} else {
+	    			return false;
+	    		}
+	    	}
+    	} else {
+    		return false;
+    	}
+    	// will never reach this simply adding it to stop error
+		return null;
+    }
 }
