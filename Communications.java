@@ -86,13 +86,15 @@ public class Communications implements Runnable{
 		int ind=0;
 		try { //keep going until EOF
 		    //scans input and records it in arrays
-		    if (ind<32) {
-			buf[ind]=dat.readByte();
-		    }
-		    else {
-			mod[ind]=dat.readByte();
-		    }
+		    while (ind<64) {
+			if (ind<32) {
+			    buf[ind]=dat.readByte();
+			}
+			else {
+			    mod[ind-32]=dat.readByte();
+			}
 		    ind++;
+		    }
 		}
 		catch (EOFException e) {
 		    System.out.println("end of file");//temp
@@ -100,10 +102,10 @@ public class Communications implements Runnable{
 		}
 		//call method in crypt
 		if (ind<=32) {//if the user not the one initiating
-		    crypt.handleKey(buf,cn.getInetAddress().toString()); 
+		    crypt.handleKey(buf,cn.getInetAddress().getHostAddress()); 
 		}
 		else {
-		    crypt.handleKeyAndMod(buf,mod,cn.getInetAddress().toString()); 
+		    crypt.handleKeyAndMod(buf,mod,cn.getInetAddress().getHostAddress()); 
 		//close streams
 		dat.close();istream.close();cn.close();
 		

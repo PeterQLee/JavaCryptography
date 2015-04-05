@@ -162,7 +162,7 @@ public class Cryptogravisor extends JFrame implements ActionListener{
     }
     public void handleKey(byte[] info, String address) {
 	//handles encryption info passed for public key crypt
-    	
+    	System.out.println("KEY INBOUND");
 	if (contacts.containsAddress(address)) {
 	    System.out.println("Key recieved");
 	    int ind=contacts.indexOfAddress(address);
@@ -177,7 +177,7 @@ public class Cryptogravisor extends JFrame implements ActionListener{
     public void handleKeyAndMod(byte dat[], byte mod[], String address){
     	// Adds a new friend contact for the user to change the name of
 	System.out.println("rec mod"+address);
-    	addToContacts("New Friend", address);
+    	contacts.addContact("New Friend", address);
     	encryptlist.add(new Encryption(mod));
     	// Calculates the key
 	int ind=contacts.indexOfAddress(address);
