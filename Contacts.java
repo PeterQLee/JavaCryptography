@@ -38,6 +38,12 @@ public class Contacts {
        }
        return contacts;
     }
+    public String getAddress(int ind) {
+	if (ind>=0 && ind<address.size()) {
+	    return address.get(ind);
+	}
+	return null;
+    }
     public int indexOfName(String n){
        //return index of a given name
        return name.indexOf(n);    
@@ -56,10 +62,10 @@ public class Contacts {
 	    			return false;
 	    		}
 	    	}
-    	} else {
+	}
     		return false;
-    	}
+    	
     	// will never reach this simply adding it to stop error
-		return null;
+		
     }
 }
