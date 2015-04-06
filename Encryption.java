@@ -37,10 +37,11 @@ public class Encryption {
 	else {
 	    byte g[]=new byte[32];
 	    int i;
-	    for (i=32-1;i>32-n.length;i--) {
-		g[i]=n[i];
+
+	    for (i=0;i<n.length;i++) {
+		g[32-n.length+i]=n[i];
 	    }
-	    for (;i>0;i--) {
+	    for (i=0;i<32-n.length;i++) {
 		g[i]=0;
 	    }
 	    return g;
@@ -133,14 +134,17 @@ public class Encryption {
 	return ret;
     }
 		
-    /*    public static void main(String args[]) throws Exception{   
-	Encryption enc=new Encryption(5,BigInteger.valueOf(7));
-	enc.key=BigInteger.valueOf(23);
-	String m="I Am a cow";
-	String r=enc.encryptText(m);
-	System.out.println(r);
-	System.out.println(enc.decryptText(r));
-	}*/
+    /*      public static void main(String args[]) throws Exception{   
+	  byte bt[]={4,1,1,1,1,3,1,1,2,1,1,2,1,1,1,2,1,1,1,1};
+	  bt=ensureByteSize(bt);
+	  System.out.println(bt.length);
+	  int numone=0;
+	  for (byte i:bt) {
+	      System.out.print(i+" ");
+	      if (i==1) numone++;
+	  }
+
+	  }*/
 	
 	
     
