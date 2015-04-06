@@ -1,4 +1,5 @@
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -107,7 +108,13 @@ public class Cryptogravisor extends JFrame implements ActionListener{
     private void addToContacts(String n, String address) {
     	//checks if IP already in use
 	
-	if (!contacts.containsAddress(address)) {
+	if (contacts.containsAddress(address)) {
+	    //remove contact
+	    int l=contacts.indexOfAddress(address);
+            contacts.removeContact(l);
+            encryptlist.remove(l);
+	    tmplist.remove(l);
+	}
 	    byte[] bigint = Encryption.calcMod();
 	    
 	    // adds the user entry to the contacts class
@@ -119,29 +126,41 @@ public class Cryptogravisor extends JFrame implements ActionListener{
 		System.out.println(bigint.length+" : "+encryptlist.get(ind).DiffieHellmanComputeKey().length);
 		comm.sendKeyAndMod(address, encryptlist.get(ind).DiffieHellmanComputeKey(), bigint);
 		tmplist.addElement(n+"@"+address); 
+		JLcontacts.setSelectedIndex(ind);
 	    }
 	    catch (Exception e) {
+		//give dialog
+		JOptionPane.showMessageDialog(null, "An error occured connecting to the other user!");
 		System.out.println("ERROR");
 		e.printStackTrace();
 		//something went wrong connecting, remove user from list
 		encryptlist.remove(ind);
 		contacts.removeContact(ind);
+		JLcontacts.setSelectedIndex(0);
 	    }
 
 
 
-	}
+
+
+	
     }
 
     private void sendMSG(String address, String message) throws InvalidatedEncryptionException {
 	//sends messaged based on the user's selected contact and their message in the textfield
 	//encrypts for recipient, and sends to user with communications class
     	// sends the encrypted message to the address
-	convo.append("You:"+message+"\n");
+	convo.append("You: "+message+"\n");
 	if (contacts.containsAddress(address)) {
 	    String ret=encryptlist.get(contacts.indexOfAddress(address)).encryptText(message);
-	    comm.send(address, ret);
-	    convo.append("You:"+ret+"\n");
+	    try {
+		comm.send(address, ret);
+	    }
+	    catch (Exception e) {
+		e.printStackTrace();
+		JOptionPane.showMessageDialog(null, "An error occured sending message to other user");
+	    }
+	    convo.append("You: "+ret+"\n");
 	    }
 
 	    
@@ -182,21 +201,47 @@ public class Cryptogravisor extends JFrame implements ActionListener{
     public void handleKeyAndMod(byte dat[], byte mod[], String address){
     	// Adds a new friend contact for the user to change the name of
 	System.out.println("rec mod"+address);
+	//check to see if ip is already in list
+
+	if (contacts.containsAddress(address)){
+	    int l=contacts.indexOfAddress(address);
+	    contacts.removeContact(l);
+	    encryptlist.remove(l);
+	    System.out.println("ind "+l);
+	    //wait for other thread to catch up
+	    
+	    SwingUtilities.invokeLater(new Runnable() {
+		    public void run() {
+			tmplist.remove(l);
+		    }
+		
+		});
+	}
+		
+
+	    
     	contacts.addContact("New Friend", address);
     	encryptlist.add(new Encryption(mod));
     	// Calculates the key
 	int ind=contacts.indexOfAddress(address);
     	encryptlist.get(ind).calcKey(dat);
 	try {
+	    
 	    comm.sendKey(address,encryptlist.get(ind).DiffieHellmanComputeKey());
 	    tmplist.addElement("New Friend@"+address); 
+	    JLcontacts.setSelectedIndex(ind);
 	}
 	catch (Exception e) {
 	    System.out.println("ERROR");
+	    //give error message
+	    convo.append("An error occurred handling connection from "+address+"\n");
+
+
 	    e.printStackTrace();
 	    //something went wrong connecting, remove user from list
 	    encryptlist.remove(ind);
 	    contacts.removeContact(ind);
+	    JLcontacts.setSelectedIndex(0);
 	}
 	
     }
