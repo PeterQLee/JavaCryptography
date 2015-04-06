@@ -147,18 +147,23 @@ public class Cryptogravisor extends JFrame implements ActionListener{
 	    
     }
     public void handleMessage(String message, String address) throws InvalidatedEncryptionException {
-	System.out.println(contacts.getContacts());//TEST
-
+	
+	if (!contacts.containsAddress(address)) {
+	    convo.append("UNKNOWN COMMUNICATOR: "+message);
+	}
 
 
 	//called by server, and will be printed to GUI by this method
 	// Creates the variables to find the correct encryption address
-	int index = contacts.indexOfAddress(address);
-	// When message is received it will be encrypted prints out encrypted message for testing purposes
-	System.out.print(message);
+	else {
+	    int index = contacts.indexOfAddress(address);
+	    // When message is received it will be encrypted prints out encrypted message for testing purposes
+	    
 	// Decrypts the message and prints it
 	// Assumes all messages that are received are encrypted
-	System.out.print(encryptlist.get(index).decryptText(message));
+	    convo.append(contacts.getName(index)+" : "+message+"\n");
+	    convo.append(contacts.getName(index)+" : "+encryptlist.get(index).decryptText(message)+"\n");
+	}
     }
     public void handleKey(byte[] info, String address) {
 	//handles encryption info passed for public key crypt

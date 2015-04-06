@@ -25,22 +25,26 @@ public class Contacts {
    	 //in order of name, then address
    	 //e.g. [Bob,192.168.2.1,Charley,127.0.0.1,Cameron,192.222.3.1..etc]
        ArrayList<String> contacts=new ArrayList<String>();
-       int i=0,j=0;
-       while(i<name.size()||j<address.size()){
-          if(i<name.size()){
+       int i=0;
+       for(;i<name.size();i++){
+          
              contacts.add(name.get(i));
-             i++;
-          }
-          if(i<address.size()){
-             contacts.add(address.get(j));
-             j++;        
-          }
+          
+             contacts.add(address.get(i));
+          
+         
        }
        return contacts;
     }
     public String getAddress(int ind) {
 	if (ind>=0 && ind<address.size()) {
 	    return address.get(ind);
+	}
+	return null;
+    }
+    public String getName(int ind) {
+	if (ind>=0 && ind<name.size()) {
+	    return  name.get(ind);
 	}
 	return null;
     }

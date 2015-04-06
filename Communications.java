@@ -52,7 +52,7 @@ public class Communications implements Runnable{
 		}
 		//call method in crypt
 		System.out.println("Fe"+message);
-		crypt.handleMessage(message,cn.getInetAddress().toString());
+		crypt.handleMessage(message,cn.getInetAddress().getHostAddress());
 		//close streams
 		dat.close();istream.close();cn.close();
 	    
