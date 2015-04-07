@@ -52,7 +52,7 @@ public class Communications implements Runnable{
 		}
 		//call method in crypt
 		System.out.println("Fe"+message);
-		crypt.handleMessage(message,cn.getInetAddress().getHostAddress());
+		crypt.handleMessage(message,cn.getInetAddress().toString());
 		//close streams
 		dat.close();istream.close();cn.close();
 	    
@@ -81,38 +81,35 @@ public class Communications implements Runnable{
 	    //PrintWriter out = new PrintWriter(kkSocket.getOutputStream(), true);
 		InputStream istream= cn.getInputStream();
 		DataInputStream dat=new DataInputStream(istream);
-		byte buf[]=new byte[32]; //arb value, fix if not
+		byte buf[]=new byte[16]; //arb value, fix if not
 		byte mod[]=new byte[32];
 		int ind=0;
 		try { //keep going until EOF
 		    //scans input and records it in arrays
-		    while (ind<64) {
-			if (ind<32) {
-			    buf[ind]=dat.readByte();
-			}
-			else {
-			    mod[ind-32]=dat.readByte();
-			}
-		    ind++;
+		    if (ind<16) {
+			buf[ind]=dat.readByte();
 		    }
+		    else {
+			mod[ind]=dat.readByte();
+		    }
+		    ind++;
 		}
 		catch (EOFException e) {
 		    System.out.println("end of file");//temp
 		
 		}
 		//call method in crypt
-		if (ind<=32) {//if the user not the one initiating
-		    crypt.handleKey(buf,cn.getInetAddress().getHostAddress()); 
+		if (ind<=16) {//if the user not the one initiating
+		    crypt.handleKey(buf,cn.getInetAddress().toString()); 
 		}
 		else {
-		    crypt.handleKeyAndMod(buf,mod,cn.getInetAddress().getHostAddress()); 
+		    crypt.handleKeyAndMod(buf,mod,cn.getInetAddress().toString()); 
 		//close streams
 		dat.close();istream.close();cn.close();
 		
-		}
 	    }
 	    keyServer.close();
-	}catch (Exception e) {e.printStackTrace();}
+	} catch (Exception e) {e.printStackTrace();}
 	
     }
   
@@ -126,28 +123,30 @@ public class Communications implements Runnable{
 	}
 	catch(Exception e) {e.printStackTrace();}
     }
-    public void sendKey(String address,byte[] key) throws Exception {
+    public void sendKey(String address,byte[] key) {
 	//send encryption key via seperate port for cryptography purposes
-
+	try {
 	    
 	    Socket s = new Socket(address,secretport);
 	    DataOutputStream out=new DataOutputStream(s.getOutputStream());
 	    out.write(key,0,key.length);
 	    s.close();
-
+	}
+	catch(Exception e) {e.printStackTrace();}
 
     }
-    public void sendKeyAndMod(String address, byte key[],byte mod[]) throws Exception{
+    public void sendKeyAndMod(String address, byte key[],byte mod[]) {
 	//sends this if the user is the one starting the conversation
 	//shares modulus for purposes of encoding
-	
+	try {
 	    
-	Socket s = new Socket(address,secretport);
-	DataOutputStream out=new DataOutputStream(s.getOutputStream());
-	out.write(key,0,key.length);
-	out.write(mod,0,mod.length);
-	s.close();
-	
+	    Socket s = new Socket(address,secretport);
+	    DataOutputStream out=new DataOutputStream(s.getOutputStream());
+	    out.write(key,0,key.length);
+	    out.write(mod,0,mod.length);
+	    s.close();
+	}
+	catch(Exception e) {e.printStackTrace();}
     }
     public void kill() {
 	//kill server		
