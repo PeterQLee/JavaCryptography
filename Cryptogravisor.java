@@ -65,6 +65,8 @@ public class Cryptogravisor extends JFrame implements ActionListener{
 	panelWest.add(JLcontacts, BorderLayout.CENTER);
 		
 	removeContact = new JButton ("Remove Contact");
+	removeContact.addActionListener(this);
+	
 	panelWest.add(removeContact, BorderLayout.SOUTH);
 
 	add(panelSouth, BorderLayout.SOUTH);
@@ -102,6 +104,15 @@ public class Cryptogravisor extends JFrame implements ActionListener{
        
        
        else if(e.getSource()==removeContact){
+    	   int ind = JLcontacts.getSelectedIndex();
+    	   try {
+    	   tmplist.remove(ind);
+    	   contacts.removeContact(ind);
+    	   encryptlist.remove(ind);
+    	   JLcontacts.remove(ind);
+    	   } catch (Exception e1){
+    		   e1.printStackTrace();
+    	   }
        }
 
     }
