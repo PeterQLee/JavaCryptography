@@ -62,12 +62,10 @@ public class Contacts {
 	    	for (int i = 0; i < this.address.size(); i++){
 	    		if (this.address.get(i).equals(address)){
 	    			return true;
-	    		} else {
-	    			return false;
-	    		}
+	    		} 
 	    	}
 	}
-    		return false;
+	return false;
     	
     	// will never reach this simply adding it to stop error
 		
