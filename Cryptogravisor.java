@@ -118,13 +118,14 @@ public class Cryptogravisor extends JFrame implements ActionListener{
        else if(e.getSource()==removeContact){
     	   int ind = JLcontacts.getSelectedIndex();
     	   try {
-    	   tmplist.remove(ind);
-    	   contacts.removeContact(ind);
-    	   encryptlist.remove(ind);
-    	   JLcontacts.remove(ind);
-	   JLcontacts.setSelectedIndex(0);
+	       tmplist.remove(ind);
+	       contacts.removeContact(ind);
+	       encryptlist.remove(ind);
+	       JLcontacts.remove(ind);
+	       JLcontacts.setSelectedIndex(0);
     	   } catch (Exception e1){
     		   e1.printStackTrace();
+		   JOptionPane.showMessageDialog(null,"An error occured erasing the contact");
     	   }
        }
        
