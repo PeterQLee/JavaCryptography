@@ -187,7 +187,7 @@ public class Cryptogravisor extends JFrame implements ActionListener{
 		e.printStackTrace();
 		JOptionPane.showMessageDialog(null, "An error occured sending message to other user");
 	    }
-	    convo.append("You(Encrypted): "+ret+"\n");
+	    convo.append("You(Encrypted)->"+address+": "+ret+"\n");
 	    }
 
 	    
@@ -207,8 +207,8 @@ public class Cryptogravisor extends JFrame implements ActionListener{
 	    
 	// Decrypts the message and prints it
 	// Assumes all messages that are received are encrypted
-	    convo.append(contacts.getName(index)+"(Encrypted): "+message+"\n");
-	    convo.append(contacts.getName(index)+": "+encryptlist.get(index).decryptText(message)+"\n");
+	    convo.append(contacts.getName(index)+"@"+contacts.getAddress(index)+"(Encrypted): "+message+"\n");
+	    convo.append(contacts.getName(index)+"@"+contacts.getAddress(index)+": "+encryptlist.get(index).decryptText(message)+"\n");
 	}
     }
     public void handleKey(byte[] info, String address) {
