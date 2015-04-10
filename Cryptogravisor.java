@@ -39,6 +39,8 @@ public class Cryptogravisor extends JFrame implements ActionListener{
 	labelmessage = new JLabel("Enter a message:");
 	panelSouth.add(labelmessage);
 	input = new JTextField(20);
+	input.addActionListener(this);
+	
 	panelSouth.add(input);
 	send = new JButton("Send");
 	panelSouth.add(send);
@@ -83,10 +85,20 @@ public class Cryptogravisor extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e) {
 	//responds to user input
 	//delegates message sends, and user adds
-	if(e.getSource()==send){
+	if(e.getSource()==send||e.getSource()==input){
 	   String newMessage = input.getText();
 	   try {
-	       sendMSG(contacts.getAddress(JLcontacts.getSelectedIndex()),newMessage);
+	       if( newMessage.equals("")) {
+		   //notify user they should enter a message
+		   JOptionPane.showMessageDialog(null, "Please enter a message");
+	       }
+	       else if (JLcontacts.getSelectedIndex()==-1) {
+		   //notify user to select a contact
+		   JOptionPane.showMessageDialog(null, "Please select a contact");
+	       }
+	       else {
+		   sendMSG(contacts.getAddress(JLcontacts.getSelectedIndex()),newMessage);
+	       }
 	   }
 	   catch (Exception ex) {
 	       System.out.println("No key existing yet!");
@@ -110,10 +122,13 @@ public class Cryptogravisor extends JFrame implements ActionListener{
     	   contacts.removeContact(ind);
     	   encryptlist.remove(ind);
     	   JLcontacts.remove(ind);
+	   JLcontacts.setSelectedIndex(0);
     	   } catch (Exception e1){
     		   e1.printStackTrace();
     	   }
        }
+       
+	   
 
     }
     private void addToContacts(String n, String address) {
@@ -133,6 +148,7 @@ public class Cryptogravisor extends JFrame implements ActionListener{
 	    encryptlist.add(new Encryption(bigint));
 	    // sends the key and mod to given address 
 	    int ind=contacts.indexOfAddress(address);
+
 	    try {
 		System.out.println(bigint.length+" : "+encryptlist.get(ind).DiffieHellmanComputeKey().length);
 		comm.sendKeyAndMod(address, encryptlist.get(ind).DiffieHellmanComputeKey(), bigint);
@@ -171,7 +187,7 @@ public class Cryptogravisor extends JFrame implements ActionListener{
 		e.printStackTrace();
 		JOptionPane.showMessageDialog(null, "An error occured sending message to other user");
 	    }
-	    convo.append("You: "+ret+"\n");
+	    convo.append("You(Encrypted): "+ret+"\n");
 	    }
 
 	    
@@ -179,7 +195,7 @@ public class Cryptogravisor extends JFrame implements ActionListener{
     public void handleMessage(String message, String address) throws InvalidatedEncryptionException {
 	
 	if (!contacts.containsAddress(address)) {
-	    convo.append("UNKNOWN COMMUNICATOR: "+message);
+	    convo.append("UNKNOWN COMMUNICATOR: "+message+"\n");
 	}
 
 
@@ -191,8 +207,8 @@ public class Cryptogravisor extends JFrame implements ActionListener{
 	    
 	// Decrypts the message and prints it
 	// Assumes all messages that are received are encrypted
-	    convo.append(contacts.getName(index)+" : "+message+"\n");
-	    convo.append(contacts.getName(index)+" : "+encryptlist.get(index).decryptText(message)+"\n");
+	    convo.append(contacts.getName(index)+"(Encrypted): "+message+"\n");
+	    convo.append(contacts.getName(index)+": "+encryptlist.get(index).decryptText(message)+"\n");
 	}
     }
     public void handleKey(byte[] info, String address) {
@@ -215,7 +231,7 @@ public class Cryptogravisor extends JFrame implements ActionListener{
 	//check to see if ip is already in list
 
 	if (contacts.containsAddress(address)){
-	    int l=contacts.indexOfAddress(address);
+	    final int l=contacts.indexOfAddress(address);
 	    contacts.removeContact(l);
 	    encryptlist.remove(l);
 	    System.out.println("ind "+l);
@@ -240,7 +256,8 @@ public class Cryptogravisor extends JFrame implements ActionListener{
 	    
 	    comm.sendKey(address,encryptlist.get(ind).DiffieHellmanComputeKey());
 	    tmplist.addElement("New Friend@"+address); 
-	    JLcontacts.setSelectedIndex(ind);
+	    //JLcontacts.setSelectedIndex(ind);
+	    //we don't change the user, so we don't distrupt presumed messaging with a different user
 	}
 	catch (Exception e) {
 	    System.out.println("ERROR");
