@@ -116,15 +116,14 @@ public class Communications implements Runnable{
 	
     }
   
-    public void send(String address, String message) {
+    public void send(String address, String message) throws Exception{
 	//send message to specified ip
-	try {
+
 	    Socket s = new Socket(address,communport);
 	    DataOutputStream out=new DataOutputStream(s.getOutputStream());
 	    out.writeChars(message);
 	    s.close();
-	}
-	catch(Exception e) {e.printStackTrace();}
+
     }
     public void sendKey(String address,byte[] key) throws Exception {
 	//send encryption key via seperate port for cryptography purposes

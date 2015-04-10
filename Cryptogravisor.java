@@ -188,7 +188,7 @@ public class Cryptogravisor extends JFrame implements ActionListener{
 		JOptionPane.showMessageDialog(null, "An error occured sending message to other user");
 	    }
 	    convo.append("You(Encrypted)->"+address+": "+ret+"\n");
-	    }
+	}
 
 	    
     }
