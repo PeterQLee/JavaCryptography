@@ -53,6 +53,7 @@ public class Cryptogravisor extends JFrame implements ActionListener{
 	convo = new JTextArea("New Convo\n", 30, 35);
 	convo.setLineWrap(true);
 	convo.setWrapStyleWord(true);
+	convo.setEditable(false);
 	panelCenter.add(convo);
 	//create west panel
 	panelWest.setLayout(new BorderLayout());
